@@ -17,12 +17,12 @@ var setCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = lb.Unlock(namespace, code)
+		err = lb.Unlock(namespace, code, salt)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		err = lb.SetValue([]byte(value), namespace, path)
+		err = lb.SetValue([]byte(value), namespace, path, salt)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -45,4 +45,5 @@ func init() {
 	setCmd.Flags().StringVar(&namespace, "namespace", "main", "namespace to put the item in")
 	setCmd.Flags().StringVar(&path, "path", "/", "default path to write the item to")
 	setCmd.Flags().StringVar(&value, "value", "", "value to write to the item")
+	setCmd.Flags().StringVar(&salt, "salt", "", "salt to add extra layer of security")
 }

@@ -41,12 +41,12 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = lb.Unlock(namespace, code)
+		err = lb.Unlock(namespace, code, salt)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		data, err := lb.GetValue(namespace, path)
+		data, err := lb.GetValue(namespace, path, salt)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -69,5 +69,6 @@ func init() {
 	getCmd.Flags().StringVar(&code, "code", "", "time based code to unlock the lockbox")
 	getCmd.Flags().StringVar(&namespace, "namespace", "main", "namespace to put the item in")
 	getCmd.Flags().StringVar(&path, "path", "/", "default path to write the item to")
+	getCmd.Flags().StringVar(&salt, "salt", "", "salt to add extra layer of security")
 	// getCmd.Flags().StringVar(&value, "value", "", "value to write to the item")
 }
