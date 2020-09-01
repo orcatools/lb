@@ -34,7 +34,7 @@ var initCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = lb.Init(namespace)
+		err = lb.Init(namespace, salt)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -57,4 +57,5 @@ func init() {
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
 	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	initCmd.Flags().StringVar(&salt, "salt", "", "salt to add extra layer of security")
 }

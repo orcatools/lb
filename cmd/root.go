@@ -13,6 +13,7 @@ var (
 	namespace string
 	path      string
 	value     string
+	salt      string
 )
 
 // rootCmd represents the base command when called without any subcommands
