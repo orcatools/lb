@@ -16,13 +16,11 @@ var setCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			fmt.Println(fmt.Errorf("lockbox name argument is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("lockbox name argument is required"))
 		}
 
 		if _, err := os.Stat(args[0]); os.IsNotExist(err) {
-			fmt.Println("invalid lockbox name")
-			os.Exit(1)
+			log.Fatalln("invalid lockbox name")
 		}
 
 		// ORDER OF PRIORITY:
@@ -53,27 +51,25 @@ var setCmd = &cobra.Command{
 		}
 
 		if u == "" {
-			fmt.Println(fmt.Errorf("a username is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("a username is required"))
 		}
 
 		if p == "" {
-			fmt.Println(fmt.Errorf("a password is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("a password is required"))
 		}
 
 		lb, err := lockbox.GetLockbox(args[0])
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		err = lb.Unlock(ns, u, p, code)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		err = lb.SetValue([]byte(path), []byte(value))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		os.Exit(0)
 	},

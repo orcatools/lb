@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"log"
-	"os"
 
 	lockbox "github.com/orcatools/lockbox"
 	"github.com/spf13/cobra"
@@ -18,8 +17,7 @@ var initCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: make this error message better by checking args length
 		if len(args) != 1 {
-			fmt.Println(fmt.Errorf("lockbox name argument is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("lockbox name argument is required"))
 		}
 		// ORDER OF PRIORITY:
 		// - flags
@@ -49,13 +47,11 @@ var initCmd = &cobra.Command{
 		}
 
 		if u == "" {
-			fmt.Println(fmt.Errorf("a username is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("a username is required"))
 		}
 
 		if p == "" {
-			fmt.Println(fmt.Errorf("a password is required"))
-			os.Exit(1)
+			log.Fatalln(fmt.Errorf("a password is required"))
 		}
 
 		lb, err := lockbox.GetLockbox(args[0])
@@ -64,11 +60,11 @@ var initCmd = &cobra.Command{
 		}
 		otp, err := lb.Init(ns, u, p)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		err = lb.Close()
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		fmt.Println(fmt.Sprintf("OTP SECRET: %v", otp.Secret()))
 	},
