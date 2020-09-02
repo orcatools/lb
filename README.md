@@ -45,3 +45,13 @@ This is the official CLI tool for Lockbox.
     - NOTE: If you see this error message:
         `cannot get value while lockbox is locked`
       it means the mfa code did not work for some reason (probably expired), or your user information is inccorrect.
+
+## Config File Example:
+
+Default location is: `$HOME/.lockbox.yaml`
+```
+username: <USERNAME>
+password: <PASSWORD>
+
+namespace: <NAMESPACE>
+```
