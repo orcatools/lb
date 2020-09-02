@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -32,6 +33,7 @@ var setCmd = &cobra.Command{
 		ns := viper.GetString("namespace")
 		u := viper.GetString("username")
 		p := viper.GetString("password")
+		var v []byte
 
 		if namespace != "" {
 			ns = namespace
@@ -43,6 +45,22 @@ var setCmd = &cobra.Command{
 
 		if password != "" {
 			p = password
+		}
+
+		if value != "" {
+			v = []byte(value)
+		}
+
+		if value == "" && filepath != "" {
+			filev, err := ioutil.ReadFile(filepath)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			v = filev
+		}
+
+		if value == "" && filepath == "" {
+			log.Fatalln("a value or a file must be provided")
 		}
 
 		// if we still don't have a namespace, username, password set, we need to error.
@@ -67,7 +85,7 @@ var setCmd = &cobra.Command{
 			log.Fatalln(err)
 		}
 
-		err = lb.SetValue([]byte(path), []byte(value))
+		err = lb.SetValue([]byte(path), v)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -83,8 +101,8 @@ func init() {
 	setCmd.Flags().StringVar(&value, "value", "", "value to write to the item")
 	setCmd.Flags().StringVar(&username, "username", "", "user's username")
 	setCmd.Flags().StringVar(&password, "password", "", "user's password")
+	setCmd.Flags().StringVar(&filepath, "file", "", "path to file")
 
 	setCmd.MarkFlagRequired("code")
 	setCmd.MarkFlagRequired("path")
-	setCmd.MarkFlagRequired("value")
 }
