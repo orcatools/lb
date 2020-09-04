@@ -72,6 +72,8 @@ github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRW
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/orcatools/lockbox v0.0.0-20200901151607-39d24a4a7312 h1:MBxVOlJ0RtbGKDRAdazvhQWnxpdPJ01jBYhHVDneeWk=
 github.com/orcatools/lockbox v0.0.0-20200901151607-39d24a4a7312/go.mod h1:yZjRRn8MDChOsBje9mWh2Y4JaGIo5X023+4O6vQA+Ws=
+github.com/orcatools/lockbox v0.0.0-20200904044225-80342b8f84f7 h1:T7HnPPqsdStc1FAzndX9Ne7U202VZ+l1JQlHK1pmBAk=
+github.com/orcatools/lockbox v0.0.0-20200904044225-80342b8f84f7/go.mod h1:yZjRRn8MDChOsBje9mWh2Y4JaGIo5X023+4O6vQA+Ws=
 github.com/pelletier/go-toml v1.2.0 h1:T5zMGML61Wp+FlcbWjRDT7yAxhJNAiPPLOFECq181zc=
 github.com/pelletier/go-toml v1.2.0/go.mod h1:5z9KED0ma1S8pY6P1sdut58dfprrGBbd/94hg7ilaic=
 github.com/pkg/errors v0.8.0/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
