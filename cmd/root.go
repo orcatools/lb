@@ -17,6 +17,7 @@ var (
 	value     string
 	username  string
 	password  string
+	filepath  string
 	verbose   bool
 )
 
