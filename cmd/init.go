@@ -1,26 +1,12 @@
-/*
-Copyright © 2020 NAME HERE <EMAIL ADDRESS>
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-*/
 package cmd
 
 import (
+	"fmt"
 	"log"
-	"os"
 
 	lockbox "github.com/orcatools/lockbox"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
 )
 
 // initCmd represents the init command
@@ -29,33 +15,64 @@ var initCmd = &cobra.Command{
 	Short: "initialize a new lockbox",
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		// NOTE: should load password from environment variable.
-		lb, err := lockbox.GetLockbox(args[0], os.Getenv("LOCKBOX_MASTER_KEY"))
+		// TODO: make this error message better by checking args length
+		if len(args) != 1 {
+			log.Fatalln(fmt.Errorf("lockbox name argument is required"))
+		}
+		// ORDER OF PRIORITY:
+		// - flags
+		// - environment variables
+		// - config file in $HOME/.lockbox.yaml
+
+		// check viper, which checks config and environment
+		ns := viper.GetString("namespace")
+		u := viper.GetString("username")
+		p := viper.GetString("password")
+
+		if namespace != "" {
+			ns = namespace
+		}
+
+		if username != "" {
+			u = username
+		}
+
+		if password != "" {
+			p = password
+		}
+
+		// if we still don't have a namespace, username, password set, we need to error.
+		if ns == "" {
+			ns = "main" // this is the "default" namespace
+		}
+
+		if u == "" {
+			log.Fatalln(fmt.Errorf("a username is required"))
+		}
+
+		if p == "" {
+			log.Fatalln(fmt.Errorf("a password is required"))
+		}
+
+		lb, err := lockbox.GetLockbox(args[0])
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = lb.Init(namespace, salt)
+		otp, err := lb.Init(ns, u, p)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		err = lb.Close()
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
+		fmt.Println(fmt.Sprintf("OTP SECRET: %v", otp.Secret()))
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(initCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// initCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// initCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-	initCmd.Flags().StringVar(&salt, "salt", "", "salt to add extra layer of security")
+	initCmd.Flags().StringVar(&namespace, "namespace", "", "the namespace to use")
+	initCmd.Flags().StringVar(&username, "username", "", "user's username")
+	initCmd.Flags().StringVar(&password, "password", "", "user's password")
 }
