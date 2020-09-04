@@ -64,11 +64,18 @@ var getCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		err = lb.Unlock(ns, u, p, code)
+		mfa, err := lb.CheckMFA(ns)
 		if err != nil {
 			log.Fatal(err)
 		}
-
+		if mfa {
+			err = lb.UnlockWithMFA(ns, u, p, code)
+		} else {
+			err = lb.Unlock(ns, u, p)
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
 		data, err := lb.GetValue([]byte(path))
 		if err != nil {
 			log.Fatalln(err)
@@ -85,7 +92,5 @@ func init() {
 	getCmd.Flags().StringVar(&namespace, "namespace", "", "namespace to put the item in")
 	getCmd.Flags().StringVar(&username, "username", "", "user's username")
 	getCmd.Flags().StringVar(&password, "password", "", "user's password")
-
-	getCmd.MarkFlagRequired("code")
 	getCmd.MarkFlagRequired("path")
 }
