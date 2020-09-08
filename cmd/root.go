@@ -19,6 +19,7 @@ var (
 	password  string
 	filepath  string
 	verbose   bool
+	enableMFA bool
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -48,7 +49,7 @@ func init() {
 	// will be global for your application.
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.lockbox.yaml)")
-	rootCmd.Flags().BoolVar(&verbose, "verbose", false, "run in verbose mode")
+	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "run in verbose mode")
 }
 
 // initConfig reads in config file and ENV variables if set.

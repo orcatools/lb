@@ -16,7 +16,7 @@ var initCmd = &cobra.Command{
 	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		// TODO: make this error message better by checking args length
-		if len(args) != 1 {
+		if len(args) < 1 {
 			log.Fatalln(fmt.Errorf("lockbox name argument is required"))
 		}
 		// ORDER OF PRIORITY:
@@ -58,15 +58,25 @@ var initCmd = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		otp, err := lb.Init(ns, u, p)
-		if err != nil {
-			log.Fatalln(err)
+		if enableMFA {
+			otp, err := lb.InitWithMFA(ns, u, p)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			fmt.Println("lockbox initialized")
+			fmt.Println(fmt.Sprintf("OTP SECRET: %v", otp.Secret()))
+		} else {
+			err = lb.Init(ns, u, p)
+			if err != nil {
+				log.Fatalln(err)
+			}
+			fmt.Println("lockbox initialized")
 		}
+
 		err = lb.Close()
 		if err != nil {
 			log.Fatalln(err)
 		}
-		fmt.Println(fmt.Sprintf("OTP SECRET: %v", otp.Secret()))
 	},
 }
 
@@ -75,4 +85,5 @@ func init() {
 	initCmd.Flags().StringVar(&namespace, "namespace", "", "the namespace to use")
 	initCmd.Flags().StringVar(&username, "username", "", "user's username")
 	initCmd.Flags().StringVar(&password, "password", "", "user's password")
+	initCmd.Flags().BoolVar(&enableMFA, "enableMFA", false, "enable multi-factor auth")
 }

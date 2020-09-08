@@ -7,7 +7,7 @@ require (
 	github.com/kr/pretty v0.2.0 // indirect
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
-	github.com/orcatools/lockbox v0.0.0-20200904044225-80342b8f84f7
+	github.com/orcatools/lockbox v0.0.0-20200901151607-39d24a4a7312
 	github.com/spf13/cobra v1.0.0
 	github.com/spf13/viper v1.4.0
 	github.com/stretchr/testify v1.4.0 // indirect
